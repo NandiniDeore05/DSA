@@ -1,0 +1,268 @@
+//writing the void get_bin(int n) function is a good trick n logic. SEE IT.
+
+//Take count of the no of digits in the get_binary function itself.
+//and , compare those in main and add the reqd zero's to get the reqd result.
+//set sum and carry to zero while performing addn
+//use a^b^c for sum
+//use ab +bc + ac for carry
+//Take care of how we do the 1s and 2s complement.
+
+
+#include <iostream>
+using namespace std;
+class node
+{
+	bool digit;
+	node* next;
+	node* prev;
+public:
+	friend class ll;
+};
+
+class ll
+{
+public:
+	node* head;
+	node* tail;
+	bool sum;
+	bool carry;
+	ll()
+	{
+		head = tail = NULL;
+	}
+	void get_bin(int n);
+	void insert_front(bool b);
+	void insert_back(bool b);
+	void display();
+	void ones(node* start);
+	void twos(node* end);
+	void add(node* end1,node* end2);
+	int counter();
+};
+
+void ll::insert_front(bool b)
+{
+	node* nn = new node;
+	nn->digit = b;
+	nn->next = NULL;
+	nn->prev = NULL;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = tail = nn;
+	}
+	else//not empty
+	{
+		nn->next = head;
+		head->prev = nn;
+		head = nn;
+	}
+}
+
+void ll::insert_back(bool b)
+{
+	node* nn = new node;
+	nn->digit = b;
+	nn->next = NULL;
+	nn->prev = NULL;
+
+	if (head == NULL && tail == NULL)//empty
+	{
+		head = tail = nn;
+	}
+	else//not empty
+	{
+		tail->next = nn;
+		nn->prev = tail;
+		tail = nn;
+	}
+}
+
+
+void ll::get_bin(int n)
+{
+	while (n != 1)
+	{
+		if (n % 2 == 0)
+		{
+			insert_front(0);
+		}
+		else
+		{
+			insert_front(1);
+		}
+		n = n / 2;
+	}
+	insert_front(1);
+}
+
+void ll::ones(node* start)
+{
+	while (start != NULL)
+	{
+		if (start->digit == 1)
+		{
+			insert_back(0);
+		}
+		else
+		{
+			insert_back(1);
+		}
+
+		start = start->next;
+	}
+}
+
+void ll::twos(node* end)
+{
+	if (end->digit == 0)
+	{
+		insert_front(1);
+		carry = 0;
+	}
+	else
+	{
+		insert_front(0);
+		carry = 1;
+	}
+
+	end = end->prev;
+
+	while (end != NULL)
+	{
+		if (carry == 0)
+		{
+			insert_front(end->digit);
+		}
+		else
+		{
+			if (end->digit == 0)
+			{
+				insert_front(1);
+				carry = 0;
+			}
+			else
+			{
+				insert_front(0);
+				carry = 1;
+			}
+		}
+
+		end = end->prev;
+	}
+	
+	if (carry==1)
+	{
+		insert_front(1);
+	}
+}
+
+void ll::add(node* end1, node* end2)
+{
+	sum = 0;
+	carry = 0;
+
+	while (end1 != NULL)
+	{
+		sum = (end1->digit ^ end2->digit ^ carry);
+		carry = (end1->digit & end2->digit) | (end2->digit & carry) | (end1->digit & carry);
+		insert_front(sum);
+
+		end1 = end1->prev;
+		end2 = end2->prev;
+	}
+
+	if (carry==1)
+	{
+		insert_front(1);
+	}
+}
+
+void ll::display()
+{
+	node* start = head;
+	cout << "---Display---" << endl;
+	while (start != NULL)
+	{
+		cout << start->digit << " " ;
+		start = start->next;
+	}
+	cout << endl;
+}
+
+int ll::counter()
+{
+	int count = 0;
+	node* start = head;
+	while (start != NULL)
+	{
+		count++;
+		start = start->next;
+	}
+	return count;
+}
+
+
+int main()
+{
+	int n,n2;
+	cout << "Enter the decimal number" << endl;
+	cin >> n;
+
+	ll a;
+
+	a.get_bin(n);
+	a.display();
+
+	ll b;
+
+	cout << "\n\t1's Complement" << endl;
+	b.ones(a.head);
+	b.display();
+
+	ll c;
+
+	cout << "\n\t2's Complement" << endl;
+	c.twos(b.tail);
+	c.display();
+
+	ll a2;
+
+	cout << "Enter another decimal number" << endl;
+	cin >> n2;
+	a2.get_bin(n2);
+	a2.display();
+
+	cout << "\n\tAddition" << endl;
+
+	ll e;
+
+	int c1 = a.counter();
+	int c2 = a2.counter();
+
+	if (c1 == c2)
+	{
+		e.add(a.tail, a2.tail);
+	}
+	else if (c1 > c2)
+	{
+		for (int i = 0; i < c1 - c2; i++)
+		{
+			a2.insert_front(0);
+		}
+		e.add(a.tail, a2.tail);
+	}
+
+	else
+	{
+		for (int i = 0; i < c2 - c1; i++)
+		{
+			a.insert_front(0);
+		}
+		e.add(a.tail, a2.tail);
+	}
+
+	e.display();
+
+	return 0;
+}

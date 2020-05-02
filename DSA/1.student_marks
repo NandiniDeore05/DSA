@@ -1,0 +1,247 @@
+#include<iostream>
+using namespace std;
+
+class student
+{
+	int rno[100];
+	float a[100];
+	float marks[100];
+	int abs;
+	int pre;
+public:
+	int size;
+	student()
+	{
+		pre = 0;
+		abs = 0;
+	}
+	void getdata();
+	void getrno();
+	void putrno();
+	void max();
+	void min();
+	void avrg();
+	void freq();
+};
+
+void student::getdata()
+{
+	cout << "\n\tEnter Marks :" << endl;
+	cout << "\n\tEnter -1 if Absent" << endl;
+
+	for (int i = 0; i < size; i++)
+	{
+		cin >> marks[i];
+	}
+
+	for (int i = 0; i < size; i++)
+	{
+		if (marks[i] == -1)
+		{
+			abs++;
+		}
+	}
+
+	getrno();
+
+	for (int i = 0; i < size; i++)
+	{
+		if (marks[i] != -1)
+		{
+			a[pre] = marks[i];
+			pre++;
+		}
+	}
+}
+
+void student::getrno()
+{
+	if (abs == 0)
+	{
+		cout << "\n\tAll Present" << endl;
+	}
+	else
+	{
+		cout << "\n\tEnter Rno of " << abs << " absent students" << endl;
+		for (int i = 0; i < abs; i++)
+		{
+			cin >> rno[i];
+		}
+	}
+}
+
+void student::putrno()
+{
+	if (abs == 0)
+	{
+		cout << "\n\tAll Present" << endl;
+	}
+	else
+	{
+		cout << "\n\tRno of " << abs << " absent students" << endl;
+		for (int i = 0; i < abs; i++)
+		{
+			cout << rno[i]<<endl;
+		}
+	}
+}
+
+void student::max()
+{
+	if (pre == 0)
+	{
+		cout << "\n\tAll Absent" << endl;
+	}
+	else
+	{
+		float temp = a[0];
+		for (int i = 0; i < pre; i++)
+		{
+			if (a[i] > temp)
+			{
+				temp=a[i];
+			}
+		}
+		cout << "Highest :" << temp << endl;
+	}
+
+}
+
+void student::min()
+{
+	if (pre == 0)
+	{
+		cout << "\n\tAll Absent" << endl;
+	}
+	else
+	{
+		float temp = a[0];
+		for (int i = 0; i < pre; i++)
+		{
+			if (a[i] < temp)
+			{
+				temp=a[i];
+			}
+		}
+		cout << "Lowest :" << temp << endl;
+	}
+}
+
+void student::avrg()
+{
+
+	if (pre == 0)
+	{
+		cout << "\n\tAll Absent" << endl;
+	}
+	else
+	{
+		float sum = 0.0;
+		for (int i = 0; i < pre; i++)
+		{
+			sum = sum + a[i];
+		}
+
+		float avrg = sum / size;
+		cout << "Average: " << avrg << endl;
+
+	}
+}
+
+void student::freq()
+{
+	if (pre == 0)
+	{
+		cout << "\n\tAll Absent" << endl;
+	}
+	else
+	{
+		float freq = 0.0;
+		float value = 0.0;
+		int count = 0;
+		int temp_count = 0;
+
+		for (int i = 0; i < pre; i++)
+		{
+			freq = a[i];
+			for (int j = 0; j < pre; j++)
+			{
+				if (freq == a[j])
+				{
+					count++;
+				}
+			}
+
+			if (count > temp_count)
+			{
+				temp_count = count;
+				value = a[i];
+			}
+		}
+
+		if (temp_count == 1)
+		{
+			cout << "\n\tAll Distinct Marks" << endl;
+		}
+		else
+		{
+			cout << "\n\tFrequent Marks: "<<value << endl;
+		}
+	}
+}
+
+int main()
+{
+	student s;
+	cout << "Enter Total Number of students" << endl;
+	cin >> s.size;
+	int ch;
+
+	s.getdata();
+
+	do
+	{
+		cout << "\n\tEnter Your Choice" << endl;
+		cout << "\n\t1.Highest" << endl;
+		cout << "\n\t2.Lowest" << endl;
+		cout << "\n\t3.Average" << endl;
+		cout << "\n\t4.Frequent" << endl;
+		cout << "\n\t5.Absent List" << endl;
+		cout << "\n\t6.Exit" << endl;
+		cin >> ch;
+
+		switch (ch)
+		{
+			case 1:
+				s.max();
+				break;
+
+			case 2:
+				s.min();
+				break;
+
+			case 3:
+				s.avrg();
+				break;
+
+			case 4:
+				s.freq();
+				break;
+
+			case 5:
+				s.putrno();
+				break;
+
+			case 6:
+				cout << "Thank You!!!" << endl;
+				break;
+
+			default:cout << "Invalid Choice" << endl;
+		}
+
+	} while (ch != 6);
+
+	cout << "Exit" << endl;
+
+	return 0;
+}

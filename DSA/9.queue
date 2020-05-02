@@ -1,0 +1,152 @@
+//IMP
+//queue empty:- (head=null)
+//deq is to delete element from front
+//enq is to insert element from back
+
+//Make a singly linked list by class node and class ll
+//Make data memebers private and use friend class ll; in node class.
+//In class ll, have only head
+//
+//Member fns:
+//void ins(int n);
+//void del();
+//void disp();
+//bool isempty();
+
+//create node* nn=new node;
+//nn->prn=n;
+//nn->next=NULL; in insert fn
+
+//in insert:
+//1. check if empty, if yes just do head=nn;
+//2. if not, have while loop to reach end of list n then insert.
+
+//in delete:
+//1.check if empty, display del not possible
+//2. if not, delete.
+
+#include<iostream>
+using namespace std;
+class node
+{
+	int prn;
+	node* next;
+public:
+	node()
+	{
+		prn = 0;
+	}
+	friend class ll;
+};
+class ll
+{
+	node* head;
+public:
+	ll()
+	{
+		head = NULL;
+	}
+	void ins(int n);
+	void del();
+	void disp();
+	bool isempty();
+};
+bool ll::isempty()
+{
+	if (head == NULL)
+		return true;
+
+	return false;
+}
+void ll::ins(int n)
+{
+	node* nn = new node;
+	nn->prn = n;
+	nn->next = NULL;
+
+	if (isempty())
+	{
+		head = nn;
+	}
+	else
+	{
+		node* p = head;
+		while (p->next != NULL)
+		{
+			p = p->next;
+		}
+		p->next = nn;
+	}
+	cout << "---Inserted in Queue---" << endl;
+}
+void ll::del()
+{
+	if (isempty())
+		cout << "---Nothing to delete--" << endl;
+
+	else
+	{
+		node* p = head;
+		head = head->next;
+		delete(p);
+		cout << "---Deleted from Queue---" << endl;
+	}
+}
+void ll::disp()
+{
+	if (isempty())
+		cout << "---Nothing to Display---" << endl;
+	else
+	{
+		node* start = head;
+		while (start != NULL)
+		{
+			cout << start->prn << endl;
+			start = start->next;
+		}
+	}
+}
+int main()
+{
+	int ch;
+	int ele;
+	ll a;
+	do
+	{
+		cout << "\n\t Enter ur Choice" << endl;
+		cout << "\n\t 1.Add Job" << endl;
+		cout << "\n\t 2.Delete Job" << endl;
+		cout << "\n\t 3.Display " << endl;
+		cout << "\n\t 4.Exit" << endl;
+
+		cin >> ch;
+
+		switch (ch)
+		{
+		case 1:
+			cout << "Enter PRN of Job" << endl;
+			cin >> ele;
+			a.ins(ele);
+			break;
+
+		case 2:
+			a.del();
+			break;
+
+		case 3:
+			cout << "---Displaying Queue---" << endl;
+			a.disp();
+			break;
+
+		case 4:
+			cout << "\n\tThank You!!!" << endl;
+			break;
+
+		default:cout << "Invalid Choice" << endl;
+		}
+	} while (ch != 4);
+	
+	cout << "\n\tExit" << endl;
+	return 0;
+}
+

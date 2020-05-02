@@ -1,0 +1,136 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+class stack
+{
+public:
+	int top;
+	int size;
+	char* arr;
+	stack()
+	{
+		top = -1;
+	}
+	void push(char n);
+	char pop();
+	void check(string s);
+};
+
+void stack::check(string s)
+{
+	int flag = 0;
+	int i = 0;
+	char ch;
+
+	while (s[i] != '\0')
+	{
+		ch = s[i];
+
+		if (ch == '(' || ch == '[' || ch == '{')
+		{
+			push(ch);
+		}
+
+		else if (ch == ')')
+		{
+			if (top == -1)//before popping,if empty there's a mismatch
+			{
+				flag++;
+				break;
+			}
+			else//popping but mismatch
+			{
+				char c = pop();
+				if (c != '(')
+				{
+					flag++;
+					break;
+				}
+			}
+		}
+
+		else if (ch == '}')
+		{
+			if (top == -1)//before popping,if empty there's a mismatch
+			{
+				flag++;
+				break;
+			}
+			else//popping but mismatch
+			{
+				char c = pop();
+				if (c != '{')
+				{
+					flag++;
+					break;
+				}
+			}
+		}
+
+		else if (ch == ']')
+		{
+			if (top == -1)//before popping,if empty there's a mismatch
+			{
+				flag++;
+				break;
+			}
+			else//popping but mismatch
+			{
+				char c = pop();
+				if (c != '[')
+				{
+					flag++;
+					break;
+				}
+			}
+		}
+		i++;
+	}
+	if (flag == 0 && top==-1)
+	{
+		cout << "\n\tParenthesis Match" << endl;
+	}
+	else
+	{
+		cout << "\n\tParenthesis Dont Match" << endl;
+	}
+}
+
+void stack::push(char n)
+{
+	top++;
+	arr[top] = n;
+}
+
+char stack::pop()
+{
+	char temp=NULL;
+	temp = arr[top];
+	top--;
+	return temp;
+}
+
+int main()
+{
+	int ch;
+	do
+	{
+		string s;
+		stack st;
+
+		cout << "Enter Expression" << endl;
+		cin >> s;
+
+		st.size = s.length();
+		st.arr = new char[s.length()];
+
+		st.check(s);
+
+		cout << "Enter 0 to Exit" << endl;
+		cin >> ch;
+
+	} while (ch != 0);
+	
+	return 0;
+}
